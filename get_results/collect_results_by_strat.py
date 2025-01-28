@@ -11,11 +11,18 @@ def main():
                         help='a file used to store combined simulation results')
     
     args = parser.parse_args()
-    print('in_folder:', args.in_folder)
-    print('out_file:', args.out_file)
-    assert os.path.isdir(args.in_folder), "path to input folder not found"
+    print('current_directory: ', os.getcwd()) 
+    print('in_folder: ', args.in_folder)
+    full_in_folder = os.path.join(os.getcwd(), args.in_folder) 
+    print('full in_folder: ', full_in_folder)
+    print()
+    print('out_file: ', args.out_file)
+    full_out_file = os.path.join(os.getcwd(), args.out_file) 
+    print('full out_file: ', full_out_file)
+    print()
+    assert os.path.isdir(full_in_folder), "path to input folder not found"
     
-    all_files = glob.glob(args.in_folder+"/*.txt")
+    all_files = glob.glob(full_in_folder+"/*.txt")
     print('total number files:', len(all_files))
     fieldnames = ['Exp_no', 'NB_no',
                   'Treat_no', 'Rep_no', 'Seed',
@@ -30,7 +37,7 @@ def main():
                   'Veh_by_edge',
                   'Init_Veh_coords']
     
-    with open(args.out_file, 'w') as out_csvfile:
+    with open(full_out_file, 'w') as out_csvfile:
         writer = csv.DictWriter(out_csvfile, fieldnames=fieldnames, delimiter='\t')
         writer.writeheader()
     
