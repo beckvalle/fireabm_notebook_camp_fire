@@ -69,7 +69,7 @@ def abm_timer(start, end):
     print("{:0>2}:{:0>2}:{:05.2f}".format(int(hours),int(minutes),seconds))   
     
 def setup_sim(g, seed=51, no_seed=False):
-    fig, ax = ox.plot_graph(g, node_size=0, figsize=(18, 15), show=False) #keel w=~h*1.2, remove margin
+    fig, ax = ox.plot_graph(g, node_size=0, figsize=(18, 15), show=False, bgcolor="#ffffff", edge_color='#111111') #keel w=~h*1.2, remove margin
     fig.tight_layout()
     if not no_seed:
         set_seeds(seed)
@@ -146,20 +146,20 @@ def inspect(g, nid, mid=None, radius=300, showMap=False, fullMap=True): # Becky 
         if not mid:
             nc = ['r' if node==nid else '#336699' for node in t.nodes()]
             ns = [50 if node==nid else 8 for node in t.nodes()]
-            ox.plot_graph(t,node_size=ns,node_color=nc,node_zorder=2)
+            ox.plot_graph(t,node_size=ns,node_color=nc,node_zorder=2, bgcolor="#ffffff", edge_color='#111111')
             if showMap:  # Becky add showMap logic
                 return ox.plot_graph_folium(t)
         else:
             ec = ['r' if u==nid and v==mid else '#336699' for u, v, key, data in t.edges(keys=True, data=True)]
             es = [3 if u==nid and v==mid else 1 for u, v, key, data in t.edges(keys=True, data=True)]
-            ox.plot_graph(t, node_size=30, edge_color=ec, edge_linewidth=es, edge_alpha=0.5)
+            ox.plot_graph(t, node_size=30, edge_color=ec, edge_linewidth=es, edge_alpha=0.5, bgcolor="#ffffff")
             if showMap: # Becky add showMap logic
                 return ox.plot_graph_folium(t)
     
 def highlight(g,edgelist,showMap=False):
     ec = ['r' if (u,v,key) in edgelist else '#336699' for u, v, key in g.edges(keys=True)]
     es = [3 if (u,v,key) in edgelist else 1 for u, v,key in g.edges(keys=True)]
-    ox.plot_graph(g, node_size=30, edge_color=ec, edge_linewidth=es, edge_alpha=0.5)
+    ox.plot_graph(g, node_size=30, edge_color=ec, edge_linewidth=es, edge_alpha=0.5, bgcolor="#ffffff")
     if showMap:
         return ox.plot_graph_folium(g)
     
@@ -215,7 +215,7 @@ def view_node_attrib(g, attrib, show_null=False):
     if attrib == 'culdesacs':
         culdesacs = [key for key, value in g.graph['streets_per_node'].items() if value==1]
         nc = ['r' if node in culdesacs else 'none' for node in g.nodes()]
-    ox.plot_graph(g, node_color=nc)
+    ox.plot_graph(g, node_color=nc, bgcolor="#ffffff", edge_color='#111111')
         
 def view_edge_attrib(g, attrib, figsize=(10, 8), show_null=False, show_edge_values=False, edge_value_rm=None, show_val=False, val=None, num_bins=5, set_range=None, breaks=None, set_colors=None, node_size=5): #keel
     gdf_edges = ox.graph_to_gdfs(g, nodes=False, edges=True)
@@ -312,7 +312,7 @@ def view_edge_attrib(g, attrib, figsize=(10, 8), show_null=False, show_edge_valu
             fig_size = (8, 8)
         
         
-        fig, ax = ox.plot_graph(g, figsize=fig_size, node_size=node_size, edge_color=ec, edge_alpha=0.5, edge_linewidth=elw, show=False, close=False) #keel
+        fig, ax = ox.plot_graph(g, figsize=fig_size, node_size=node_size, edge_color=ec, edge_alpha=0.5, edge_linewidth=elw, show=False, close=False, bgcolor="#ffffff") #keel
     
         if show_edge_values:
             for index, row in gdf_edges.iterrows():
@@ -372,7 +372,7 @@ def show_fire(g, fire_perim, show_graph=True, sim_time_num=None): #Becky added
     if sim_time_num:
         fire_perim = fire_perim[fire_perim["SimTime"]==sim_time_num]
     if show_graph == True:
-        fig, ax = ox.plot_graph(g, node_size=30, edge_alpha=0.5, show=False, axis_off=False, close=False)
+        fig, ax = ox.plot_graph(g, node_size=30, edge_alpha=0.5, show=False, axis_off=False, close=False, bgcolor="#ffffff", edge_color='#111111')
         fire_perim.plot(ax=ax, cmap='YlOrRd', alpha=0.1, zorder=4)
         fire_perim.boundary.plot(ax=ax, color='grey', alpha=0.75, zorder=4)
     else:
@@ -384,7 +384,7 @@ def show_shpfile(g, shpfile, show_graph=True, is_fire=True, sim_time_num=None): 
         if sim_time_num:
             shpfile = shpfile[shpfile["SimTime"]==sim_time_num]
     if show_graph == True:
-        fig, ax = ox.plot_graph(g, node_size=30, edge_alpha=0.5, show=False, axis_off=False, close=False)
+        fig, ax = ox.plot_graph(g, node_size=30, edge_alpha=0.5, show=False, axis_off=False, close=False, bgcolor="#ffffff", edge_color='#111111')
         shpfile.plot(ax=ax, cmap='YlOrRd', alpha=0.1, zorder=4)
         shpfile.boundary.plot(ax=ax, color='grey', alpha=0.75, zorder=4)
     else:
@@ -409,7 +409,7 @@ def convert_fire_time(fire_perim, spread_num=None, sim_time_num=None, length=Fal
         return fire_list
     
 def setup_graph(g): # Becky added
-    fig, ax = ox.plot_graph(g, node_size=0, figsize=(18,15), show=False) #keel
+    fig, ax = ox.plot_graph(g, node_size=0, figsize=(18,15), show=False, bgcolor="#ffffff", edge_color='#111111') #keel
     fig.tight_layout()
     return fig, ax
         
@@ -507,6 +507,7 @@ def add_households(g, hh_shp, shp_name, hh_col_name, cut_off_len=10, num_col=10,
     
     # updated becky 11-11-24
     for row in edges_with_hhs.iterrows():
+        # print('test0', row[0], 'test', row[1][hh_col_name])
         hh_dict[row[0]] = row[1][hh_col_name]
         
     # broken iterator
@@ -523,7 +524,7 @@ def add_households(g, hh_shp, shp_name, hh_col_name, cut_off_len=10, num_col=10,
     return_list = [g]
     
     if bbox_poly:
-        
+        # print("setting ratios for bbox poly")
         overlap = hh_shp['geometry'].intersection(bbox_poly)
         hh_shp['full_tract_area'] = hh_shp.geometry.area
         hh_shp_pts = hh_shp.copy()
@@ -543,7 +544,16 @@ def add_households(g, hh_shp, shp_name, hh_col_name, cut_off_len=10, num_col=10,
         cpd_hh_join['Est_Area_Cpd_Ratio'] = cpd_hh_join['cp_area']/cpd_hh_join.geometry.area
         
         cpd_hh_join_sel = cpd_hh_join[['NAME', 'Est_Area_Cpd_Ratio']]
+        
+
+        # save index as columns to add back later
+        edges_with_hhs['u_index'] = edges_with_hhs.index.get_level_values(0)
+        edges_with_hhs['v_index'] = edges_with_hhs.index.get_level_values(1)
+        edges_with_hhs['key_index'] = edges_with_hhs.index.get_level_values(2)
+        
         edges_with_hhs_cpd = edges_with_hhs.merge(cpd_hh_join_sel, on='NAME')
+        # i think merging removes the u v key multi index
+            
         # becky 11-11-24 convert to float type
         edges_with_hhs_cpd[hh_col_name] = edges_with_hhs_cpd[hh_col_name].astype('float')
         
@@ -563,23 +573,27 @@ def add_households(g, hh_shp, shp_name, hh_col_name, cut_off_len=10, num_col=10,
             
         # updated becky 11-11-24
         for row in edges_with_hhs_cpd.iterrows():
-            tract_dict[row[0]] = row[1]['Est_Area_Cpd_Ratio']
+            cpt_dict[(row[1]['u_index'], row[1]['v_index'], row[1]['key_index'])] = row[1]['Est_Area_Cpd_Ratio']
+        # print("cpt_dict check: ", cpt_dict)
             
         # broken iterator
         # for i in list(zip(edges_with_hhs_cpd['u'], edges_with_hhs_cpd['v'], edges_with_hhs_cpd['key'], edges_with_hhs_cpd['Tot_Est_HH_cpd'])):
         #     tot_hh_cpt_dict[(i[0], i[1], i[2])] = i[3]
         
+        # print(" ")
         # updated becky 11-11-24
         for row in edges_with_hhs_cpd.iterrows():
-            tract_dict[row[0]] = row[1]['Tot_Est_HH_cpd']
+            tot_hh_cpt_dict[(row[1]['u_index'], row[1]['v_index'], row[1]['key_index'])] = row[1]['Tot_Est_HH_cpd']
+        # print("tot_hh_cpt_dict check: ", tot_hh_cpt_dict)
             
         # broken iterator
         # for i in list(zip(edges_with_hhs_cpd['u'], edges_with_hhs_cpd['v'], edges_with_hhs_cpd['key'], edges_with_hhs_cpd['HH_Cpd_pct'])):
         #     tot_hh_cpt_pct_dict[(i[0], i[1], i[2])] = i[3]
-            
+
         # updated becky 11-11-24
         for row in edges_with_hhs_cpd.iterrows():
-            tract_dict[row[0]] = row[1]['HH_Cpd_pct']
+            tot_hh_cpt_pct_dict[(row[1]['u_index'], row[1]['v_index'], row[1]['key_index'])] = row[1]['HH_Cpd_pct']
+        # print("tot_hh_cpt_pct_dict check: ", tot_hh_cpt_pct_dict)
         
         nx.set_edge_attributes(g, cpt_dict, 'Est_Area_Cpd_Ratio')
         nx.set_edge_attributes(g, tot_hh_cpt_dict, 'Tot_Est_HH_Cpd')
@@ -1155,21 +1169,36 @@ class NetABM():
             raise ValueError("No roads in the given bbox")
             
         self.in_roads_prob = np.array([r.length for r in self.roads_in_bbox])
+        # becky check for zero sum 11-12-24
+        if sum(self.in_roads_prob) <= 0:
+            raise ValueError("Road probability sum is zero!")
         self.in_roads_prob/= sum(self.in_roads_prob)
         self.in_roads_prob[0] += 1.0-sum(self.in_roads_prob)
         
         if placement_prob is not None: # sets road probabilities by household ratio
             if placement_prob == 'Pct_HH_Cpd':
+                
                 self.in_roads_prob = self.in_roads_prob * [r.hh_ratio for r in self.roads_in_bbox]
                 self.in_roads_prob[np.isnan(self.in_roads_prob)] = 0
+                
+                # becky check for zero sum 11-12-24
+                if sum(self.in_roads_prob) <= 0:
+                    raise ValueError("Road probability sum is zero!")
                 self.in_roads_prob/= sum(self.in_roads_prob)
+
             else:
                 self.in_roads_prob = self.in_roads_prob * [r.test_hh_ratio for r in self.roads_in_bbox]
                 self.in_roads_prob[np.isnan(self.in_roads_prob)] = 0
+                # becky check for zero sum 11-12-24
+                if sum(self.in_roads_prob) <= 0:
+                    raise ValueError("Road probability sum is zero!")
                 self.in_roads_prob/= sum(self.in_roads_prob)
+
             
+
             self.in_roads_prob[0] += 1.0-sum(self.in_roads_prob)
-         
+            
+       
         self.closed_roads = set()
         self.last_closed_roads = set()
         self.start_time = None

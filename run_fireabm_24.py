@@ -58,18 +58,23 @@ def main():
 
     # ## DEFAULTS
     # typically the same per experiment
+     # fire set for paradise
     parser.add_argument('-fsp', '--fire_shape_file', default='santa_rosa_fire.shp', type=str, dest='fire_shapefile',
                         help='a shapefile with fire perimeters (expected export from FlamMap), must have "Simtime" column. Store fire shapefile in "fire_input" folder.')
 
     # typically the same per fire shapefile, can be advanced to simulate later fire stages. value must be present in shapefile
+    # fire set for paradise
     parser.add_argument('-sft', '--start_fire_time', default=60, type=int, dest='start_fire_time',
                         help='"Simtime" value for initial wildfire perimeter')
     # typically the same per each simulation run currently
     parser.add_argument('-strd', '--strategy_distribution', default=1.0, type=float, dest='strat_distribution', nargs='+',
                         help='ammount of vehicles using strategy')
     # typically the same per study area
-    parser.add_argument('-bbb', '--bbox_buffer', default=[2.1, 4.5, 3, 3], type=list, dest='bbox_buffer',
+    # buffer set for paradise
+    parser.add_argument('-bbb', '--bbox_buffer', default=[2, 2.75, 2.5, 2.5], type=list, dest='bbox_buffer',
                         help='buffer to adjust location of disaster area bounding box relative to study area extent')
+    #parser.add_argument('-bbb', '--bbox_buffer', default=[2.1, 4.5, 3, 3], type=list, dest='bbox_buffer',
+    #                    help='buffer to adjust location of disaster area bounding box relative to study area extent')
     # use for bookkeeping
     parser.add_argument('-expno', '--experiment_no', default=1, type=int, dest='exp_no',
                         help='experiment number')
